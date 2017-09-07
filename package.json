@@ -1,0 +1,14 @@
+{
+  "name": "dotnet-solution",
+  "version": "0.0.1",
+  "description": "dotnet solution file model",
+  "main": "index.js",
+  "author": "Andy Dote",
+  "license": "ISC",
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "devDependencies": {
+    "jest": "^21.0.1"
+  }
+}
