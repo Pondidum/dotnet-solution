@@ -1,4 +1,5 @@
 const types = {
+  folder: '2150E333-8FDC-42A3-9474-1A3956D46DE8',
   project: 'FAE04EC0-301F-11D3-BF4B-00C04F79EFBC'
 }
 
@@ -9,8 +10,8 @@ class Solution {
     this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
   }
 
-  addFolder(name) {
-    this.folders.push(name)
+  addFolder(folder) {
+    this.folders.push(folder)
   }
 
   addProject(project) {
@@ -25,7 +26,8 @@ class Solution {
     append('VisualStudioVersion = 14.0.25420.1')
     append('MinimumVisualStudioVersion = 10.0.40219.1')
 
-    this.appendProjects(append)
+    this.appendProjects(append, types.folder, this.folders)
+    this.appendProjects(append, types.project, this.projects)
 
     append('Global')
     append('	GlobalSection(SolutionConfigurationPlatforms) = preSolution')
@@ -44,11 +46,9 @@ class Solution {
     append('')
   }
 
-  appendProjects(append) {
-    this.projects.forEach(p => {
-      append(
-        `Project("{${types.project}}") = "${p.name}", "${p.path}", "{${p.id}}"`
-      )
+  appendProjects(append, type, items) {
+    items.forEach(x => {
+      append(`Project("{${type}}") = "${x.name}", "${x.path}", "{${x.id}}"`)
       append(`EndProject`)
     })
   }

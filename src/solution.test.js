@@ -37,3 +37,17 @@ it('should write a single project to the solution file', () => {
 
   expect(writer.lines).toEqual(linesOf('oneProject'))
 })
+
+it('should write a single folder to the solution file', () => {
+  const writer = createWriter()
+  const solution = new Solution()
+
+  solution.addFolder({
+    id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
+    name: 'Parent',
+    path: 'Parent'
+  })
+  solution.writeTo(writer)
+
+  expect(writer.lines).toEqual(linesOf('oneFolder'))
+})
