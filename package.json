@@ -9,6 +9,14 @@
     "test": "jest --watchAll"
   },
   "devDependencies": {
-    "jest": "^21.0.1"
+    "babel-jest": "^21.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^21.0.1",
+    "regenerator-runtime": "^0.11.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   }
 }
