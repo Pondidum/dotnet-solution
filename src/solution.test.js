@@ -1,5 +1,14 @@
-import solution from './solution'
+import Solution from './solution'
 import fs from 'fs'
+
+const createWriter = () => {
+  return {
+    lines: [],
+    writeLine: function(line) {
+      this.lines.push(line)
+    }
+  }
+}
 
 const linesOf = name =>
   fs
@@ -8,21 +17,16 @@ const linesOf = name =>
     .split(/\r?\n/)
 
 it('should be able to output a blank solution file', () => {
-  const lines = []
-  const writer = {
-    writeLine: line => lines.push(line)
-  }
-
+  const writer = createWriter()
+  const solution = new Solution()
   solution.writeTo(writer)
 
-  expect(lines).toEqual(linesOf('blank'))
+  expect(writer.lines).toEqual(linesOf('blank'))
 })
 
 it('should write a single project to the solution file', () => {
-  const lines = []
-  const writer = {
-    writeLine: line => lines.push(line)
-  }
+  const writer = createWriter()
+  const solution = new Solution()
 
   solution.addProject({
     id: '3F5F5B05-7B61-43BF-9217-7E2005FAEF68',
@@ -31,5 +35,5 @@ it('should write a single project to the solution file', () => {
   })
   solution.writeTo(writer)
 
-  expect(lines).toEqual(linesOf('oneProject'))
+  expect(writer.lines).toEqual(linesOf('oneProject'))
 })
