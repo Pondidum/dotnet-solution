@@ -41,6 +41,9 @@ class Solution {
     append('		HideSolutionNode = FALSE')
     append('	EndGlobalSection')
     append('	GlobalSection(NestedProjects) = preSolution')
+
+    this.appendNesting(append)
+
     append('	EndGlobalSection')
     append('EndGlobal')
     append('')
@@ -63,6 +66,13 @@ class Solution {
       })
     })
     append('	EndGlobalSection')
+  }
+
+  appendNesting(append) {
+    this.projects.filter(project => project.parent).forEach(project => {
+      const folder = this.folders.find(f => f.name === project.parent)
+      append(`\t\t{${project.id}} = {${folder.id}}`)
+    })
   }
 }
 
