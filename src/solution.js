@@ -29,8 +29,7 @@ class Solution {
 
     append('Global')
     append('	GlobalSection(SolutionConfigurationPlatforms) = preSolution')
-    append('		Debug|Any CPU = Debug|Any CPU')
-    append('		Release|Any CPU = Release|Any CPU')
+    this.appendConfigurations(append)
     append('	EndGlobalSection')
 
     this.appendPlatforms(append)
@@ -52,6 +51,10 @@ class Solution {
       append(`Project("{${x.type}}") = "${x.name}", "${x.path}", "{${x.id}}"`)
       append(`EndProject`)
     })
+  }
+
+  appendConfigurations(append) {
+    this.configurations.forEach(config => append(`\t\t${config} = ${config}`))
   }
 
   appendPlatforms(append) {
