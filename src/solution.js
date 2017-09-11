@@ -5,17 +5,16 @@ const types = {
 
 class Solution {
   constructor() {
-    this.projects = []
-    this.folders = []
+    this.children = []
     this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
   }
 
   addFolder(folder) {
-    this.folders.push(folder)
+    this.children.push(Object.assign({}, folder, { type: types.folder }))
   }
 
   addProject(project) {
-    this.projects.push(project)
+    this.children.push(Object.assign({}, project, { type: types.project }))
   }
 
   writeTo(writer) {
@@ -26,8 +25,7 @@ class Solution {
     append('VisualStudioVersion = 14.0.25420.1')
     append('MinimumVisualStudioVersion = 10.0.40219.1')
 
-    this.appendProjects(append, types.folder, this.folders)
-    this.appendProjects(append, types.project, this.projects)
+    this.appendChildren(append)
 
     append('Global')
     append('	GlobalSection(SolutionConfigurationPlatforms) = preSolution')
@@ -49,9 +47,9 @@ class Solution {
     append('')
   }
 
-  appendProjects(append, type, items) {
-    items.forEach(x => {
-      append(`Project("{${type}}") = "${x.name}", "${x.path}", "{${x.id}}"`)
+  appendChildren(append) {
+    this.children.forEach(x => {
+      append(`Project("{${x.type}}") = "${x.name}", "${x.path}", "{${x.id}}"`)
       append(`EndProject`)
     })
   }
@@ -59,19 +57,23 @@ class Solution {
   appendPlatforms(append) {
     append('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution')
 
-    this.projects.forEach(project => {
-      this.configurations.forEach(config => {
-        append(`\t\t{${project.id}}.${config}.ActiveCfg = ${config}`)
-        append(`\t\t{${project.id}}.${config}.Build.0 = ${config}`)
+    this.children
+      .filter(child => child.type === types.project)
+      .forEach(project => {
+        this.configurations.forEach(config => {
+          append(`\t\t{${project.id}}.${config}.ActiveCfg = ${config}`)
+          append(`\t\t{${project.id}}.${config}.Build.0 = ${config}`)
+        })
       })
-    })
     append('	EndGlobalSection')
   }
 
   appendNesting(append) {
-    this.projects.filter(project => project.parent).forEach(project => {
-      const folder = this.folders.find(f => f.name === project.parent)
-      append(`\t\t{${project.id}} = {${folder.id}}`)
+    this.children.filter(child => child.parent).forEach(child => {
+      const parent = this.children.find(
+        c => c.name.localeCompare(child.parent) === 0
+      )
+      append(`\t\t{${child.id}} = {${parent.id}}`)
     })
   }
 }

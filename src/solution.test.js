@@ -73,3 +73,25 @@ it('should add a project to a folder', () => {
 
   expect(writer.lines).toEqual(linesOf('oneFolderChildProject'))
 })
+
+it('should add folders to a folder', () => {
+  const writer = createWriter()
+  const solution = new Solution()
+
+  solution.addFolder({
+    id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
+    name: 'Parent',
+    path: 'Parent'
+  })
+
+  solution.addFolder({
+    id: 'E2939C1D-DE3E-4455-88D6-CBA711FE1FAD',
+    name: 'ChildOne',
+    path: 'ChildOne',
+    parent: 'Parent'
+  })
+
+  solution.writeTo(writer)
+
+  expect(writer.lines).toEqual(linesOf('childFolder'))
+})
