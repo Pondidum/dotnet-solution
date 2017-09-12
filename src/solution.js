@@ -1,10 +1,23 @@
-import SolutionWriter from './SolutionWriter'
+import SolutionWriter from './solutionWriter'
 import ChildTypes from './childTypes'
 
 class Solution {
   constructor() {
     this.children = []
     this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
+  }
+
+  getProjects() {
+    return this.children
+      .filter(child => child.type === ChildTypes.project)
+      .map(project => {
+        let { type, ...scrubbed } = project
+        return scrubbed
+      })
+  }
+
+  getConfigurations() {
+    return this.configurations
   }
 
   addFolder(folder) {
