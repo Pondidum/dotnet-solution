@@ -6,11 +6,12 @@
   "author": "Andy Dote",
   "license": "ISC",
   "scripts": {
-    "test": "jest --watchAll --no-cache"
+    "test": "jest"
   },
   "devDependencies": {
     "babel-jest": "^21.0.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "jest": "^21.0.1",
     "regenerator-runtime": "^0.11.0"
   },
