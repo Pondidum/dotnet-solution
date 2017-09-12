@@ -16,18 +16,21 @@ const linesOf = name =>
     .toString()
     .split(/\r?\n/)
 
+let writer
+let solution
+
+beforeEach(() => {
+  writer = createWriter()
+  solution = new Solution()
+})
+
 it('should be able to output a blank solution file', () => {
-  const writer = createWriter()
-  const solution = new Solution()
   solution.writeTo(writer)
 
   expect(writer.lines).toEqual(linesOf('blank'))
 })
 
 it('should write a single project to the solution file', () => {
-  const writer = createWriter()
-  const solution = new Solution()
-
   solution.addProject({
     id: '3F5F5B05-7B61-43BF-9217-7E2005FAEF68',
     name: 'ProjectUnderRoot',
@@ -39,9 +42,6 @@ it('should write a single project to the solution file', () => {
 })
 
 it('should write a single folder to the solution file', () => {
-  const writer = createWriter()
-  const solution = new Solution()
-
   solution.addFolder({
     id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
     name: 'Parent',
@@ -53,9 +53,6 @@ it('should write a single folder to the solution file', () => {
 })
 
 it('should add a project to a folder', () => {
-  const writer = createWriter()
-  const solution = new Solution()
-
   solution.addFolder({
     id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
     name: 'Parent',
@@ -75,9 +72,6 @@ it('should add a project to a folder', () => {
 })
 
 it('should add folders to a folder', () => {
-  const writer = createWriter()
-  const solution = new Solution()
-
   solution.addFolder({
     id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
     name: 'Parent',
