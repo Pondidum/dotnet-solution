@@ -31,3 +31,16 @@ it('should read a single project', () => {
     }
   ])
 })
+
+it('should read a single folder', () => {
+  const reader = new SolutionReader()
+  const solution = reader.fromLines(linesOf('oneFolder'))
+
+  expect(solution.getFolders()).toEqual([
+    {
+      id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
+      name: 'Parent',
+      path: 'Parent'
+    }
+  ])
+})
