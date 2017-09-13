@@ -7,6 +7,15 @@ class Solution {
     this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
   }
 
+  getFolders() {
+    return this.children
+      .filter(child => child.type === ChildTypes.folder)
+      .map(project => {
+        let { type, ...scrubbed } = project
+        return scrubbed
+      })
+  }
+
   getProjects() {
     return this.children
       .filter(child => child.type === ChildTypes.project)
