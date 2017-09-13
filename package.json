@@ -6,7 +6,7 @@
   "author": "Andy Dote",
   "license": "ISC",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "devDependencies": {
     "babel-jest": "^21.0.0",
