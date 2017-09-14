@@ -67,12 +67,19 @@ class SolutionWriter {
   appendNesting(solution) {
     this.append('	GlobalSection(NestedProjects) = preSolution')
 
-    solution.children.filter(child => child.parent).forEach(child => {
-      const parent = solution.children.find(
-        c => c.name.localeCompare(child.parent) === 0
-      )
-      this.append(`\t\t{${child.id}} = {${parent.id}}`)
-    })
+    const reducer = (result, child) =>
+      Object.assign(result, {
+        [child.id]: child.id,
+        [child.name]: child.id
+      })
+
+    const relationships = solution.children.reduce(reducer, {})
+
+    solution.children
+      .filter(child => child.parent && relationships[child.parent])
+      .forEach(child => {
+        this.append(`\t\t{${child.id}} = {${relationships[child.parent]}}`)
+      })
 
     this.append('	EndGlobalSection')
   }
