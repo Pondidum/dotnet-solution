@@ -1,4 +1,3 @@
-import SolutionWriter from './solutionWriter'
 import ChildTypes from './childTypes'
 
 class Solution {
@@ -49,12 +48,6 @@ class Solution {
 
   add(item, type) {
     this.children.push(Object.assign({}, item, { type: type }))
-  }
-
-  writeTo(writer) {
-    const append = line => writer.writeLine(line)
-    const sw = new SolutionWriter(append)
-    sw.write(this)
   }
 }
 

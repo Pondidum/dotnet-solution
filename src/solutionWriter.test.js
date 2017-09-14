@@ -1,14 +1,6 @@
 import Solution from './solution'
+import SolutionWriter from './solutionWriter'
 import fs from 'fs'
-
-const createWriter = () => {
-  return {
-    lines: [],
-    writeLine: function(line) {
-      this.lines.push(line)
-    }
-  }
-}
 
 const linesOf = name =>
   fs
@@ -16,18 +8,20 @@ const linesOf = name =>
     .toString()
     .split(/\r?\n/)
 
+let lines
 let writer
 let solution
 
 beforeEach(() => {
-  writer = createWriter()
+  lines = []
+  writer = new SolutionWriter(line => lines.push(line))
   solution = new Solution()
 })
 
 it('should be able to output a blank solution file', () => {
-  solution.writeTo(writer)
+  writer.write(solution)
 
-  expect(writer.lines).toEqual(linesOf('blank'))
+  expect(lines).toEqual(linesOf('blank'))
 })
 
 it('should write a single project to the solution file', () => {
@@ -36,9 +30,9 @@ it('should write a single project to the solution file', () => {
     name: 'ProjectUnderRoot',
     path: 'ProjectUnderRoot\\ProjectUnderRoot.csproj'
   })
-  solution.writeTo(writer)
+  writer.write(solution)
 
-  expect(writer.lines).toEqual(linesOf('oneProject'))
+  expect(lines).toEqual(linesOf('oneProject'))
 })
 
 it('should write a single folder to the solution file', () => {
@@ -47,9 +41,9 @@ it('should write a single folder to the solution file', () => {
     name: 'Parent',
     path: 'Parent'
   })
-  solution.writeTo(writer)
+  writer.write(solution)
 
-  expect(writer.lines).toEqual(linesOf('oneFolder'))
+  expect(lines).toEqual(linesOf('oneFolder'))
 })
 
 it('should add a project to a folder', () => {
@@ -66,9 +60,9 @@ it('should add a project to a folder', () => {
     parent: 'Parent'
   })
 
-  solution.writeTo(writer)
+  writer.write(solution)
 
-  expect(writer.lines).toEqual(linesOf('oneFolderChildProject'))
+  expect(lines).toEqual(linesOf('oneFolderChildProject'))
 })
 
 it('should add folders to a folder', () => {
@@ -85,7 +79,7 @@ it('should add folders to a folder', () => {
     parent: 'Parent'
   })
 
-  solution.writeTo(writer)
+  writer.write(solution)
 
-  expect(writer.lines).toEqual(linesOf('childFolder'))
+  expect(lines).toEqual(linesOf('childFolder'))
 })
