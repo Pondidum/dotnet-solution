@@ -38,13 +38,8 @@ class Solution {
   }
 
   add(item, type) {
-    let parentName = item.parent
-    if (item.parent) {
-      const parent = this.children.find(child => child.id === item.parent)
-      if (parent) {
-        parentName = parent.name
-      }
-    }
+    const parent = this.children.find(child => child.id === item.parent)
+    const parentName = parent ? parent.name : item.parent
 
     this.children.push(
       Object.assign({}, item, { type: type, parent: parentName })
