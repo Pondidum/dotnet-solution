@@ -12,3 +12,30 @@ it('should not leak type property when fetching projects', () => {
 
   expect(solution.getProjects()).toEqual([project])
 })
+
+it('should set folder parents correctly, when defined out of order', () => {
+  const solution = new Solution()
+
+  solution.addFolder({
+    id: 'child-id',
+    name: 'child-name',
+    parent: 'parent-id'
+  })
+
+  solution.addFolder({
+    id: 'parent-id',
+    name: 'parent-name'
+  })
+
+  expect(solution.getFolders()).toEqual([
+    {
+      id: 'child-id',
+      name: 'child-name',
+      parent: 'parent-name'
+    },
+    {
+      id: 'parent-id',
+      name: 'parent-name'
+    }
+  ])
+})

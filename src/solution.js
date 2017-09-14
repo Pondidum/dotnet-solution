@@ -8,20 +8,30 @@ class Solution {
   }
 
   getFolders() {
-    return this.children
-      .filter(child => child.type === ChildTypes.folder)
-      .map(project => {
-        let { type, ...scrubbed } = project
-        return scrubbed
-      })
+    return this.getChildren(ChildTypes.folder)
   }
 
   getProjects() {
+    return this.getChildren(ChildTypes.project)
+  }
+
+  getChildren(childType) {
+    const relationships = this.children.reduce(
+      (o, child) =>
+        Object.assign(o, {
+          [child.id]: child.name,
+          [child.name]: child.name
+        }),
+      {}
+    )
+
     return this.children
-      .filter(child => child.type === ChildTypes.project)
+      .filter(child => child.type === childType)
       .map(project => {
         let { type, ...scrubbed } = project
-        return scrubbed
+        return Object.assign({}, scrubbed, {
+          parent: relationships[scrubbed.parent]
+        })
       })
   }
 
@@ -38,12 +48,7 @@ class Solution {
   }
 
   add(item, type) {
-    const parent = this.children.find(child => child.id === item.parent)
-    const parentName = parent ? parent.name : item.parent
-
-    this.children.push(
-      Object.assign({}, item, { type: type, parent: parentName })
-    )
+    this.children.push(Object.assign({}, item, { type: type }))
   }
 
   writeTo(writer) {
