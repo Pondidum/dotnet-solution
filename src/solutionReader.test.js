@@ -66,3 +66,22 @@ it('should read a project under a folder', () => {
     }
   ])
 })
+
+it('should read a folder under a folder', () => {
+  const reader = new SolutionReader()
+  const solution = reader.fromLines(linesOf('childFolder'))
+
+  expect(solution.getFolders()).toEqual([
+    {
+      id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
+      name: 'Parent',
+      path: 'Parent'
+    },
+    {
+      id: 'E2939C1D-DE3E-4455-88D6-CBA711FE1FAD',
+      name: 'ChildOne',
+      path: 'ChildOne',
+      parent: 'Parent'
+    }
+  ])
+})
