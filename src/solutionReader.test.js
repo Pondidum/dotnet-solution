@@ -44,3 +44,25 @@ it('should read a single folder', () => {
     }
   ])
 })
+
+it('should read a project under a folder', () => {
+  const reader = new SolutionReader()
+  const solution = reader.fromLines(linesOf('oneFolderChildProject'))
+
+  expect(solution.getFolders()).toEqual([
+    {
+      id: '93E2EDB0-2AB9-4A5E-A8BD-658CAD43C2B7',
+      name: 'Parent',
+      path: 'Parent'
+    }
+  ])
+
+  expect(solution.getProjects()).toEqual([
+    {
+      id: '7EC623E8-DE59-4A2C-AD1F-333F2E54AECA',
+      name: 'ProjectUnderParent',
+      path: 'ProjectUnderParent\\ProjectUnderParent.csproj',
+      parent: 'Parent'
+    }
+  ])
+})
