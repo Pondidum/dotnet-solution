@@ -11,13 +11,12 @@ const linesOf = name =>
 
 it('should read and write an existing solution with no changes', () => {
   const sourceLines = linesOf('complete')
-  const lines = []
 
   const reader = new SolutionReader()
-  const writer = new SolutionWriter(line => lines.push(line))
+  const writer = new SolutionWriter()
 
   const solution = reader.fromLines(sourceLines)
-  writer.write(solution)
+  const lines = writer.write(solution)
 
   expect(lines).toEqual(sourceLines)
 })

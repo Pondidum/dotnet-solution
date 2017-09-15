@@ -1,71 +1,67 @@
 import ChildTypes from './childTypes'
 
 class SolutionWriter {
-  constructor(append) {
-    this.append = append
-  }
-
   write(solution) {
-    const append = this.append
+    const lines = []
+    const append = line => lines.push(line)
 
     append('Microsoft Visual Studio Solution File, Format Version 12.00')
     append('# Visual Studio 14')
     append('VisualStudioVersion = 14.0.25420.1')
     append('MinimumVisualStudioVersion = 10.0.40219.1')
 
-    this.appendChildren(solution)
+    this.appendChildren(append, solution)
 
     append('Global')
 
-    this.appendConfigurations(solution)
-    this.appendPlatforms(solution)
-    this.appendProperties(solution)
-
-    this.appendNesting(solution)
+    this.appendConfigurations(append, solution)
+    this.appendPlatforms(append, solution)
+    this.appendProperties(append, solution)
+    this.appendNesting(append, solution)
 
     append('EndGlobal')
     append('')
+
+    return lines
   }
 
-  appendChildren(solution) {
+  appendChildren(append, solution) {
     solution.children.forEach(x => {
-      this.append(
-        `Project("{${x.type}}") = "${x.name}", "${x.path}", "{${x.id}}"`
-      )
-      this.append(`EndProject`)
+      append(`Project("{${x.type}}") = "${x.name}", "${x.path}", "{${x.id}}"`)
+      append(`EndProject`)
     })
   }
 
-  appendConfigurations(solution) {
-    this.append('	GlobalSection(SolutionConfigurationPlatforms) = preSolution')
+  appendConfigurations(append, solution) {
+    append('	GlobalSection(SolutionConfigurationPlatforms) = preSolution')
     solution.configurations.forEach(config =>
-      this.append(`\t\t${config} = ${config}`)
+      append(`\t\t${config} = ${config}`)
     )
-    this.append('	EndGlobalSection')
+    append('	EndGlobalSection')
   }
 
-  appendProperties(solution) {
-    this.append('	GlobalSection(SolutionProperties) = preSolution')
-    this.append('		HideSolutionNode = FALSE')
-    this.append('	EndGlobalSection')
+  appendProperties(append, solution) {
+    append('	GlobalSection(SolutionProperties) = preSolution')
+    append('		HideSolutionNode = FALSE')
+    append('	EndGlobalSection')
   }
 
-  appendPlatforms(solution) {
-    this.append('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution')
+  appendPlatforms(append, solution) {
+    append('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution')
 
     solution.children
       .filter(child => child.type === ChildTypes.project)
       .forEach(project => {
         solution.configurations.forEach(config => {
-          this.append(`\t\t{${project.id}}.${config}.ActiveCfg = ${config}`)
-          this.append(`\t\t{${project.id}}.${config}.Build.0 = ${config}`)
+          append(`\t\t{${project.id}}.${config}.ActiveCfg = ${config}`)
+          append(`\t\t{${project.id}}.${config}.Build.0 = ${config}`)
         })
       })
-    this.append('	EndGlobalSection')
+    append('	EndGlobalSection')
   }
 
-  appendNesting(solution) {
-    this.append('	GlobalSection(NestedProjects) = preSolution')
+  appendNesting(append, solution) {
+    append('	GlobalSection(NestedProjects) = preSolution')
 
     const reducer = (result, child) =>
       Object.assign(result, {
@@ -78,10 +74,10 @@ class SolutionWriter {
     solution.children
       .filter(child => child.parent && relationships[child.parent])
       .forEach(child => {
-        this.append(`\t\t{${child.id}} = {${relationships[child.parent]}}`)
+        append(`\t\t{${child.id}} = {${relationships[child.parent]}}`)
       })
 
-    this.append('	EndGlobalSection')
+    append('	EndGlobalSection')
   }
 }
 

@@ -8,18 +8,16 @@ const linesOf = name =>
     .toString()
     .split(/\r?\n/)
 
-let lines
 let writer
 let solution
 
 beforeEach(() => {
-  lines = []
   writer = new SolutionWriter(line => lines.push(line))
   solution = new Solution()
 })
 
 it('should be able to output a blank solution file', () => {
-  writer.write(solution)
+  const lines = writer.write(solution)
 
   expect(lines).toEqual(linesOf('blank'))
 })
@@ -30,7 +28,7 @@ it('should write a single project to the solution file', () => {
     name: 'ProjectUnderRoot',
     path: 'ProjectUnderRoot\\ProjectUnderRoot.csproj'
   })
-  writer.write(solution)
+  const lines = writer.write(solution)
 
   expect(lines).toEqual(linesOf('oneProject'))
 })
@@ -41,7 +39,7 @@ it('should write a single folder to the solution file', () => {
     name: 'Parent',
     path: 'Parent'
   })
-  writer.write(solution)
+  const lines = writer.write(solution)
 
   expect(lines).toEqual(linesOf('oneFolder'))
 })
@@ -60,7 +58,7 @@ it('should add a project to a folder', () => {
     parent: 'Parent'
   })
 
-  writer.write(solution)
+  const lines = writer.write(solution)
 
   expect(lines).toEqual(linesOf('oneFolderChildProject'))
 })
@@ -79,7 +77,7 @@ it('should add folders to a folder', () => {
     parent: 'Parent'
   })
 
-  writer.write(solution)
+  const lines = writer.write(solution)
 
   expect(lines).toEqual(linesOf('childFolder'))
 })
