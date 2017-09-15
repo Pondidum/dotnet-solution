@@ -2,6 +2,4 @@ import Solution from './solution'
 import SolutionReader from './solutionReader'
 import SolutionWriter from './solutionWriter'
 
-export Solution
-export SolutionReader
-export SolutionWriter
+export { Solution, SolutionReader, SolutionWriter }
