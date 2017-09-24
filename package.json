@@ -1,6 +1,6 @@
 {
   "name": "dotnet-solution",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "dotnet solution file model",
   "author": "Andy Dote <andy@andydote.co.uk> (https://andydote.co.uk)",
   "license": "LGPL-2.1",
