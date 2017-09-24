@@ -26,7 +26,7 @@ class SolutionWriter {
   }
 
   appendChildren(append, solution) {
-    solution.children.forEach(x => {
+    solution.getChildren().forEach(x => {
       append(`Project("{${x.type}}") = "${x.name}", "${x.path}", "{${x.id}}"`)
       append(`EndProject`)
     })
@@ -34,9 +34,9 @@ class SolutionWriter {
 
   appendConfigurations(append, solution) {
     append('	GlobalSection(SolutionConfigurationPlatforms) = preSolution')
-    solution.configurations.forEach(config =>
-      append(`\t\t${config} = ${config}`)
-    )
+    solution
+      .getConfigurations()
+      .forEach(config => append(`\t\t${config} = ${config}`))
     append('	EndGlobalSection')
   }
 
@@ -49,10 +49,11 @@ class SolutionWriter {
   appendPlatforms(append, solution) {
     append('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution')
 
-    solution.children
+    solution
+      .getChildren()
       .filter(child => child.type === ChildTypes.project)
       .forEach(project => {
-        solution.configurations.forEach(config => {
+        solution.getConfigurations().forEach(config => {
           append(`\t\t{${project.id}}.${config}.ActiveCfg = ${config}`)
           append(`\t\t{${project.id}}.${config}.Build.0 = ${config}`)
         })
@@ -69,9 +70,10 @@ class SolutionWriter {
         [child.name]: child.id
       })
 
-    const relationships = solution.children.reduce(reducer, {})
+    const relationships = solution.getChildren().reduce(reducer, {})
 
-    solution.children
+    solution
+      .getChildren()
       .filter(child => child.parent && relationships[child.parent])
       .forEach(child => {
         append(`\t\t{${child.id}} = {${relationships[child.parent]}}`)

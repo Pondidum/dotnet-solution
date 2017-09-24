@@ -5,19 +5,27 @@ function Solution() {
     return new Solution()
   }
 
-  this.children = []
-  this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
+  const children = []
+  const configurations = ['Debug|Any CPU', 'Release|Any CPU']
 
-  this.getFolders = () => {
-    return this.getChildren(ChildTypes.folder)
+  const scrubType = child => {
+    const { type, ...scrubbed } = child
+    return scrubbed
   }
 
-  this.getProjects = () => {
-    return this.getChildren(ChildTypes.project)
-  }
+  const addChild = (item, type) =>
+    children.push(Object.assign({}, item, { type: type }))
+
+  this.addFolder = folder => addChild(folder, ChildTypes.folder)
+  this.addProject = project => addChild(project, ChildTypes.project)
+  this.addConfiguration = config => configurations.push(config)
+
+  this.getFolders = () => this.getChildren(ChildTypes.folder).map(scrubType)
+  this.getProjects = () => this.getChildren(ChildTypes.project).map(scrubType)
+  this.getConfigurations = () => configurations
 
   this.getChildren = childType => {
-    const relationships = this.children.reduce(
+    const relationships = children.reduce(
       (o, child) =>
         Object.assign(o, {
           [child.id]: child.name,
@@ -26,30 +34,13 @@ function Solution() {
       {}
     )
 
-    return this.children
-      .filter(child => child.type === childType)
-      .map(project => {
-        let { type, ...scrubbed } = project
-        return Object.assign({}, scrubbed, {
-          parent: relationships[scrubbed.parent]
+    return children
+      .filter(child => !childType || child.type === childType)
+      .map(project =>
+        Object.assign({}, project, {
+          parent: relationships[project.parent]
         })
-      })
-  }
-
-  this.getConfigurations = () => {
-    return this.configurations
-  }
-
-  this.addFolder = folder => {
-    this.add(folder, ChildTypes.folder)
-  }
-
-  this.addProject = project => {
-    this.add(project, ChildTypes.project)
-  }
-
-  this.add = (item, type) => {
-    this.children.push(Object.assign({}, item, { type: type }))
+      )
   }
 }
 
