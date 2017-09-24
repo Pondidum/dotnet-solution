@@ -25,20 +25,19 @@ function Solution() {
   this.getConfigurations = () => configurations
 
   this.getChildren = childType => {
-    const relationships = children.reduce(
-      (o, child) =>
-        Object.assign(o, {
-          [child.id]: child.name,
-          [child.name]: child.name
-        }),
-      {}
-    )
+    const reducer = (o, child) =>
+      Object.assign(o, {
+        [child.id]: child.name,
+        [child.name]: child.name
+      })
+
+    const nameOf = children.reduce(reducer, {})
 
     return children
       .filter(child => !childType || child.type === childType)
       .map(project =>
         Object.assign({}, project, {
-          parent: relationships[project.parent]
+          parent: nameOf[project.parent]
         })
       )
   }
