@@ -16,6 +16,17 @@ function Solution() {
   const addChild = (item, type) =>
     children.push(Object.assign({}, item, { type: type }))
 
+  const removeChild = (idOrName, type) => {
+    const index = children.findIndex(
+      child =>
+        child.type === type &&
+        (child.id === idOrName || child.name === idOrName)
+    )
+    if (index >= 0) {
+      children.splice(index, 1)
+    }
+  }
+
   this.addFolder = folder => addChild(folder, ChildTypes.folder)
   this.addProject = project => addChild(project, ChildTypes.project)
   this.addConfiguration = config => configurations.push(config)
@@ -23,6 +34,15 @@ function Solution() {
   this.getFolders = () => this.getChildren(ChildTypes.folder).map(scrubType)
   this.getProjects = () => this.getChildren(ChildTypes.project).map(scrubType)
   this.getConfigurations = () => configurations
+
+  this.removeFolder = idOrName => removeChild(idOrName, ChildTypes.folder)
+  this.removeProject = idOrName => removeChild(idOrName, ChildTypes.project)
+  this.removeConfiguration = config => {
+    const index = configurations.indexOf(config)
+    if (index >= 0) {
+      configurations.splice(index, 1)
+    }
+  }
 
   this.getChildren = childType => {
     const reducer = (o, child) =>
