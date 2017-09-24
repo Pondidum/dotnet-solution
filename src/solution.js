@@ -1,20 +1,22 @@
 import ChildTypes from './childTypes'
 
-class Solution {
-  constructor() {
-    this.children = []
-    this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
+function Solution() {
+  if (!this instanceof Solution) {
+    return new Solution()
   }
 
-  getFolders() {
+  this.children = []
+  this.configurations = ['Debug|Any CPU', 'Release|Any CPU']
+
+  this.getFolders = () => {
     return this.getChildren(ChildTypes.folder)
   }
 
-  getProjects() {
+  this.getProjects = () => {
     return this.getChildren(ChildTypes.project)
   }
 
-  getChildren(childType) {
+  this.getChildren = childType => {
     const relationships = this.children.reduce(
       (o, child) =>
         Object.assign(o, {
@@ -34,19 +36,19 @@ class Solution {
       })
   }
 
-  getConfigurations() {
+  this.getConfigurations = () => {
     return this.configurations
   }
 
-  addFolder(folder) {
+  this.addFolder = folder => {
     this.add(folder, ChildTypes.folder)
   }
 
-  addProject(project) {
+  this.addProject = project => {
     this.add(project, ChildTypes.project)
   }
 
-  add(item, type) {
+  this.add = (item, type) => {
     this.children.push(Object.assign({}, item, { type: type }))
   }
 }
